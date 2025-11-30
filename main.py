@@ -183,3 +183,30 @@ import threading, time
 threading.Thread(target=asyncio.run, args=(main(),), daemon=True).start()
 while True:
     time.sleep(60)
+
+# ←←← ЭТО ДОБАВЬ В САМЫЙ КОНЕЦ ФАЙЛА main.py (после всего кода) ←←←
+import threading
+import time
+import uvicorn
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"status": "alive"}
+
+def run_web():
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+
+# Запускаем и веб-сервер (для Render), и бота одновременно
+threading.Thread(target=run_web, daemon=True).start()
+
+# ←←← Твой обычный запуск бота остаётся без изменений
+async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
+    print("Бот запущен 24/7")
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
