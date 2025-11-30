@@ -20,19 +20,6 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 
-# ------------------- FLASK KEEP-ALIVE -------------------
-flask_app = Flask('')
-
-@flask_app.route('/')
-def home():
-    return "I'm alive"
-
-def start_flask():
-    try:
-        flask_app.run(host='0.0.0.0', port=5001, debug=False, use_reloader=False)
-    except Exception as e:
-        print(f"Flask error: {e}")
-
 REQUIRED_CHANNELS = [
     {"id": "@domclaren", "name": "domclaren", "url": "https://t.me/domclaren"},
     {"id": "@boysssk", "name": "boysssk", "url": "https://t.me/boysssk"},
