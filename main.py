@@ -268,8 +268,31 @@ async def game_finish(call: types.CallbackQuery):
     )
     del active_games[chat_id]
 
-# ------------------- ДЛЯ RENDER -------------------
-async def main():
+# ------------------- ТОЛЬКО ДЛЯ RENDER (никогда не падает) -------------------
+import threading
+import os
+from fastapi import FastAPI
+import uvicorn
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"status": "alive", "bot": "Шпион 2.0 работает 24/7"}
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="error)
+
+async def run_bot():
     await bot.delete_webhook(drop_pending_updates=True)
-    print("Шпион запущен")
-    await dp.start_polling(bot, handle_signals=False)
+    print("Шпион запущен и работает 24/7")
+    await dp.start_polling(bot)
+
+# ←←← ЭТО ГЛАВНОЕ: запускаем и веб-сервер, и бота одновременно
+if os.environ.get("RENDER"):  # если запущено на Render
+    threading.Thread(target=run_web, daemon=True).start()
+    asyncio.run(run_bot())
+else:
+    # если запускаешь локально — просто бот
+    asyncio.run(run_bot())
