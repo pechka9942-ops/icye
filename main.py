@@ -4,7 +4,6 @@ import random
 import os
 import threading
 import time
-from flask import Flask
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
