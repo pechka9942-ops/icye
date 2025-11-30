@@ -273,10 +273,3 @@ async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     print("Шпион запущен")
     await dp.start_polling(bot, handle_signals=False)
-
-# Запуск Flask сервера в отдельном потоке
-threading.Thread(target=start_flask, daemon=True).start()
-# Запуск бота в отдельном потоке
-threading.Thread(target=asyncio.run, args=(main(),), daemon=True).start()
-while True:
-    time.sleep(60)
